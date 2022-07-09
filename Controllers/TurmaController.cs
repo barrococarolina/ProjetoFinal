@@ -119,17 +119,21 @@ namespace GerenciamentoEscola.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTurma(int id)
         {
+
             if (_context.Turmas == null)
             {
                 return NotFound();
             }
             var turma = await _context.Turmas.FindAsync(id);
+
             if (turma == null)
             {
                 return NotFound($"O id {id} não existe no banco de dados.");
             }
 
-            if (!turma.Alunos.Any())
+            var existemAlunos = _context.Alunos.Where(_ => _.TurmaId == turma.Id).ToList().Any();
+
+            if (!existemAlunos)
             {
                 _context.Turmas.Remove(turma);
                 await _context.SaveChangesAsync();
@@ -152,5 +156,10 @@ namespace GerenciamentoEscola.Controllers
         {
             return (_context.Turmas?.Any(e => e.Id == id)).GetValueOrDefault();
         }
+
+        /*private bool TurmasExists(Turma turma)
+        {
+            return (_context.Turmas?.Any(c => c.Nome == turma.Nome)).GetValueOrDefault();
+        }*/
     }
 }

@@ -37,9 +37,9 @@ namespace GerenciamentoEscola.Controllers
 
             foreach (Aluno alunoCadastrado in AlunosCadastrados)
             {
-                Turma? TurmaDoAluno = TurmasCadastradas.Find(x => x.Id == alunoCadastrado.TurmaId);
+                Turma? TurmaAluno = TurmasCadastradas.Find(x => x.Id == alunoCadastrado.TurmaId);
 
-                if (TurmaDoAluno.Ativo == true)
+                if (TurmaAluno.Ativo == true)
                 {
                     alunosAtivos.Add(alunoCadastrado);
                 }
@@ -106,7 +106,7 @@ namespace GerenciamentoEscola.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!AlunoExists(id))
+                    if (!AlunosExists(id))
                     {
                         return NotFound();
                     }
@@ -155,7 +155,7 @@ namespace GerenciamentoEscola.Controllers
             return NoContent();
         }
 
-        private bool AlunoExists(int id)
+        private bool AlunosExists(int id)
         {
             return (_context.Alunos?.Any(e => e.Id == id)).GetValueOrDefault();
         }
